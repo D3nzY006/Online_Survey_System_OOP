@@ -1,0 +1,368 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Dashboard - SurveyPro{% endblock %}
+
+{% block extra_head %}
+<style>
+:root {
+        --primary-color: #667eea;
+        --secondary-color: #764ba2;
+        --text-color: #333;
+        --light-text: #666;
+        --bg-color: #f8f9fa;
+        --card-bg: #ffffff;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+    }
+
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .dashboard-header {
+        margin-bottom: 3rem;
+    }
+
+    .welcome-title {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .welcome-subtitle {
+        color: var(--light-text);
+        font-size: 1.1rem;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        text-align: center;
+        transition: var(--transition);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: var(--light-text);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Main Content */
+    .main-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 3rem;
+    }
+
+    .content-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 1rem;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+        background: #f3f4f6;
+        color: var(--text-color);
+    }
+
+    .btn-secondary:hover {
+        background: #e5e7eb;
+    }
+
+    /* Survey List */
+    .survey-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .survey-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        border: 2px solid #f0f0f0;
+        border-radius: 10px;
+        transition: var(--transition);
+    }
+
+    .survey-item:hover {
+        border-color: var(--primary-color);
+        transform: translateX(5px);
+    }
+
+    .survey-info h4 {
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .survey-meta {
+        display: flex;
+        gap: 1rem;
+        color: var(--light-text);
+        font-size: 0.9rem;
+    }
+
+    .survey-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    /* Notifications */
+    .notification-item {
+        padding: 1.5rem;
+        border-left: 4px solid var(--primary-color);
+        background: #f8fafc;
+        margin-bottom: 1rem;
+        border-radius: 0 10px 10px 0;
+    }
+
+    .notification-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .notification-date {
+        color: var(--light-text);
+        font-size: 0.8rem;
+    }
+
+    /* System Stats */
+    .system-stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .system-stat {
+        background: #f8fafc;
+        padding: 1.5rem;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .system-stat h4 {
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .dashboard-container {
+            padding: 1rem;
+        }
+
+        .main-content {
+            grid-template-columns: 1fr;
+        }
+
+        .welcome-title {
+            font-size: 2rem;
+        }
+
+        .survey-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .survey-actions {
+            align-self: flex-end;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">📊</div>
+                <span>SurveyPro</span>
+            </a>
+            <div class="user-info">
+                <span class="user-badge">Staff/Admin</span>
+                <span style="color: var(--light-text);">Welcome, {{ user.username }}!</span>
+                <a href="/logout" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="welcome-title">Staff Dashboard</h1>
+            <p class="welcome-subtitle">System-wide analytics and management</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_surveys }}</div>
+                <div class="stat-label">Total Surveys</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ total_responses }}</div>
+                <div class="stat-label">Total Responses</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ active_surveys }}</div>
+                <div class="stat-label">Active Surveys</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ total_users }}</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+        </div>
+
+        <!-- System Stats -->
+        <div class="system-stats">
+            <div class="system-stat">
+                <h4>System Health</h4>
+                <p style="color: var(--light-text);">All systems operational</p>
+            </div>
+            <div class="system-stat">
+                <h4>Last Update</h4>
+                <p style="color: var(--light-text);">{{ last_update }}</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Surveys Section -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">All Surveys</h2>
+                    <a href="/analytics/" class="btn btn-primary">View Analytics</a>
+                </div>
+                
+                {% if surveys %}
+                <div class="survey-list">
+                    {% for survey in surveys %}
+                    <div class="survey-item">
+                        <div class="survey-info">
+                            <h4>{{ survey.title }}</h4>
+                            <div class="survey-meta">
+                                <span>📅 {{ survey.start_date|date:"M d, Y" }} - {{ survey.end_date|date:"M d, Y" }}</span>
+                                <span>📊 {{ survey.response_count }} responses</span>
+                                <span class="survey-status">{{ survey.status|title }}</span>
+                                <span>👤 {{ survey.created_by.username }}</span>
+                            </div>
+                        </div>
+                        <div class="survey-actions">
+                            <a href="/survey/{{ survey.id }}/" class="btn btn-secondary">View</a>
+                            <a href="/survey/{{ survey.id }}/results/" class="btn btn-primary">Results</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div style="text-align: center; color: var(--light-text); padding: 2rem;">
+                    No surveys found
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Notifications Section -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">System Notifications</h2>
+                    <a href="/notifications/" class="btn btn-secondary">View All</a>
+                </div>
+                
+                {% if notifications %}
+                {% for notification in notifications %}
+                <div class="notification-item">
+                    <div class="notification-title">{{ notification.title }}</div>
+                    <p style="color: var(--text-color); margin-bottom: 1rem;">{{ notification.message|truncatechars:100 }}</p>
+                    <div class="notification-date">{{ notification.created_at|date:"M d, Y H:i" }}</div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div style="text-align: center; color: var(--light-text); padding: 2rem;">
+                    No new notifications
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+        // Add some interactivity
+        document.querySelectorAll('.survey-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.transform = 'translateX(5px) scale(1.02)';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = 'translateX(0) scale(1)';
+            });
+        });
+    </script>
+{% endblock %}

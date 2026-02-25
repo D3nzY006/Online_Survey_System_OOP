@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications - SurveyPro{% endblock %}
+
+{% block extra_head %}
+<style>
+.notifications-container{ max-width:1000px; margin:2rem auto; padding:1rem }
+  .notification-item{ padding:1.25rem; border-left:4px solid var(--primary-1); background:#f8fafc; border-radius:0 8px 8px 0; margin-bottom:1rem }
+  .notification-title{ font-weight:600 }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">📊</div>
+                <span>SurveyPro</span>
+            </a>
+            <div class="user-info">
+                <span class="user-badge">{{ user.role|title }}</span>
+                <span style="color: var(--light-text);">Welcome, {{ user.username }}!</span>
+                <a href="/logout" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notifications Content -->
+    <div class="notifications-container">
+        <div class="notifications-header">
+            <h1 class="notifications-title">Notifications</h1>
+            <div class="notifications-count">{{ notifications.count }} notifications</div>
+        </div>
+
+        {% if notifications %}
+        <div class="notifications-list">
+            {% for notification in notifications %}
+            <div class="notification-item {% if not notification.is_read %}unread{% endif %}">
+                <div class="notification-header">
+                    <div class="notification-title">{{ notification.title }}</div>
+                    <span class="notification-priority priority-{{ notification.priority }}">
+                        {{ notification.priority|title }}
+                    </span>
+                </div>
+                
+                <div class="notification-message">{{ notification.message }}</div>
+                
+                <div class="notification-meta">
+                    <span>{{ notification.created_at|date:"M d, Y H:i" }}</span>
+                    {% if notification.survey %}
+                    <span>Survey: {{ notification.survey.title }}</span>
+                    {% endif %}
+                </div>
+                
+                <div class="notification-actions">
+                    {% if notification.survey %}
+                    <a href="/survey/{{ notification.survey.id }}/" class="btn btn-primary">View Survey</a>
+                    {% endif %}
+                    {% if not notification.is_read %}
+                    <a href="/notification/{{ notification.id }}/read/" class="btn btn-secondary">Mark Read</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">🔔</div>
+            <h3>No Notifications</h3>
+            <p>You don't have any notifications at this time.</p>
+            <a href="/" class="btn btn-primary" style="margin-top: 2rem;">Back to Home</a>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+        // Add some interactivity
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.background = '#f8fafc';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                if (!item.classList.contains('unread')) {
+                    item.style.background = 'white';
+                }
+            });
+        });
+    </script>
+{% endblock %}

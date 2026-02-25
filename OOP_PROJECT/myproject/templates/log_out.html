@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+{% extends "base.html" %}
+
+{% block title %}Logged Out - Survey System{% endblock %}
+
+{% block content %}
+<div class="card container-centered fade-in" style="text-align:center">
+    <h1 class="slide-in">You have been logged out</h1>
+    <p class="muted" style="margin:12px 0 22px">You have successfully logged out of your account.</p>
+
+    <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
+        <a class="btn" href="/" style="min-width:120px; text-align:center">Go to Home</a>
+        <a class="btn" href="/login/" style="min-width:120px; text-align:center">Login Again</a>
+    </div>
+</div>
+{% endblock %}
+{% endblock %}

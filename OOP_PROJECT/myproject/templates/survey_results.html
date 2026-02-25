@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}{{ survey.title }} Results - SurveyPro{% endblock %}
+
+{% block extra_head %}
+<style>
+.results-container{ max-width:1000px; margin:2rem auto; padding:1rem }
+  .result-card{ background:white; padding:1rem; border-radius:10px; margin-bottom:1rem }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">📊</div>
+                <span>SurveyPro</span>
+            </a>
+            <div class="user-info">
+                {% if user.role == 'instructor' %}
+                <span class="user-badge">Instructor</span>
+                {% else %}
+                <span class="user-badge">Staff/Admin</span>
+                {% endif %}
+                <span style="color: var(--light-text);">Welcome, {{ user.username }}!</span>
+                <a href="/logout" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Results Content -->
+    <div class="results-container">
+        <div class="survey-header">
+            <h1 class="survey-title">{{ survey.title }}</h1>
+            <div class="survey-meta">
+                <span>📅 {{ survey.start_date|date:"M d, Y" }} - {{ survey.end_date|date:"M d, Y" }}</span>
+                <span>📊 {{ total_responses }} responses</span>
+                <span>👥 {{ survey.target_audience|title }}</span>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_responses }}</div>
+                <div class="stat-label">Total Responses</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ survey.questions.count }}</div>
+                <div class="stat-label">Total Questions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ survey.completion_rate|floatformat:1 }}%</div>
+                <div class="stat-label">Completion Rate</div>
+            </div>
+        </div>
+
+        <!-- Questions -->
+        <div class="questions-container">
+            {% for result in results %}
+            <div class="question-card">
+                <div class="question-text">{{ result.question.question_text }}</div>
+                
+                {% if result.question.question_type == 'multiple_choice' %}
+                <div class="chart-container">
+                    {% for response in result.responses %}
+                    <div class="chart-label">
+                        <span>{{ response.choice }}</span>
+                        <span class="chart-percentage">{{ response.percentage|floatformat:1 }}%</span>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-fill" style="width: {{ response.percentage }}%"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% elif result.question.question_type == 'rating' %}
+                <div class="chart-container">
+                    {% if result.stats.average_rating %}
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div style="font-size: 3rem; color: var(--primary-color); margin-bottom: 0.5rem;">
+                            {{ result.stats.average_rating|floatformat:1 }}
+                        </div>
+                        <div style="color: var(--light-text); font-size: 1.1rem;">Average Rating</div>
+                    </div>
+                    {% endif %}
+                    
+                    {% for response in result.responses %}
+                    <div class="chart-label">
+                        <span>{{ response.rating }} Stars</span>
+                        <span class="chart-percentage">{{ response.percentage|floatformat:1 }}%</span>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-fill" style="width: {{ response.percentage }}%"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% else %}
+                <div class="chart-container">
+                    <h4 style="margin-bottom: 1.5rem; color: var(--text-color);">Text Responses</h4>
+                    <div class="text-responses">
+                        {% for response in result.responses %}
+                        <div class="response-card">
+                            <div class="response-text">{{ response.answer_text }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Actions -->
+        <div class="actions-bar">
+            <a href="/survey/{{ survey.id }}/" class="btn btn-secondary">View Survey</a>
+            <a href="/survey/{{ survey.id }}/export/pdf/" class="btn btn-primary">Export PDF</a>
+            <a href="/survey/{{ survey.id }}/export/excel/" class="btn btn-primary">Export Excel</a>
+            <a href="/survey/{{ survey.id }}/export/csv/" class="btn btn-primary">Export CSV</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+        // Animate chart bars on load
+        window.addEventListener('load', function() {
+            const chartFills = document.querySelectorAll('.chart-fill');
+            chartFills.forEach(fill => {
+                const width = fill.style.width;
+                fill.style.width = '0%';
+                setTimeout(() => {
+                    fill.style.width = width;
+                }, 500);
+            });
+        });
+    </script>
+{% endblock %}

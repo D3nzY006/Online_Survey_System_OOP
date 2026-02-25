@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Login | Survey System{% endblock %}
+
+{% block extra_head %}
+<style>
+body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at top left, #2c3e50, #000000);
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h2 { color: #333; margin-bottom: 25px; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover { background: #5a6fd6; }
+        .footer { margin-top: 20px; font-size: 14px; color: #666; }
+        .footer a { color: #667eea; text-decoration: none; font-weight: bold; }
+        .messages { margin-bottom: 20px; }
+        .message { padding: 10px; border-radius: 5px; margin-bottom: 10px; }
+        .error { background: #fee; color: #c33; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Login</h2>
+    
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <form method="POST">
+        {% csrf_token %}
+        <div class="input-group">
+            <label>Email Address</label>
+            <input type="email" name="username" placeholder="Enter your email" required>
+        </div>
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter password" required>
+        </div>
+        <button type="submit" class="btn">Login</button>
+    </form>
+    <div class="footer">
+        Don't have an account? <a href="{% url 'register' %}">Create Account</a>
+    </div>
+</div>
+{% endblock %}

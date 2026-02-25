@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}{{ survey.title }} - SurveyPro{% endblock %}
+
+{% block extra_head %}
+<style>
+.survey-container{ max-width:900px; margin:2rem auto; padding:1rem }
+  .question{ margin-bottom:1.25rem }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">📊</div>
+                <span>SurveyPro</span>
+            </a>
+            <div class="user-info">
+                <span class="user-badge">Student</span>
+                <span style="color: var(--light-text);">Welcome, {{ user.username }}!</span>
+                <a href="/logout" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Survey Content -->
+    <div class="survey-container">
+        <div class="survey-header">
+            <h1 class="survey-title">{{ survey.title }}</h1>
+            <div class="survey-meta">
+                <span>📅 {{ survey.start_date|date:"M d, Y" }} - {{ survey.end_date|date:"M d, Y" }}</span>
+                <span>👥 {{ survey.target_audience|title }}</span>
+                <span>⏱️ Estimated time: 3-5 minutes</span>
+            </div>
+            <p class="survey-description">{{ survey.description }}</p>
+        </div>
+
+        <form method="POST" class="survey-form">
+            {% csrf_token %}
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">0% Complete</div>
+
+            {% for question in survey.questions.all %}
+            <div class="form-group">
+                <div class="question-text">
+                    {{ question.question_text }}
+                    {% if question.is_required %}<span class="required">*</span>{% endif %}
+                </div>
+
+                {% if question.question_type == 'multiple_choice' %}
+                <div class="form-options">
+                    {% for choice in question.choices.all %}
+                    <label class="form-option">
+                        <input type="radio" name="question_{{ question.id }}" value="{{ choice.id }}" required="{% if question.is_required %}required{% endif %}">
+                        <span>{{ choice.choice_text }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+
+                {% elif question.question_type == 'rating' %}
+                <div class="rating-container">
+                    {% for i in '12345'|make_list %}
+                    <span class="rating-star" data-rating="{{ forloop.counter }}" data-question="{{ question.id }}">★</span>
+                    {% endfor %}
+                    <input type="hidden" name="question_{{ question.id }}" id="rating_{{ question.id }}" required="{% if question.is_required %}required{% endif %}">
+                </div>
+
+                {% else %}
+                <textarea name="question_{{ question.id }}" class="form-control" rows="4" placeholder="Please provide your response here..." required="{% if question.is_required %}required{% endif %}"></textarea>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="form-actions">
+                <a href="/student-dashboard/" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Submit Survey</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+        // Progress bar functionality
+        const questions = document.querySelectorAll('.form-group');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        
+        function updateProgress() {
+            const totalQuestions = questions.length;
+            let answeredQuestions = 0;
+            
+            questions.forEach(question => {
+                const inputs = question.querySelectorAll('input, textarea');
+                let isAnswered = false;
+                
+                inputs.forEach(input => {
+                    if (input.type === 'radio' && input.checked) {
+                        isAnswered = true;
+                    } else if (input.type === 'hidden' && input.value) {
+                        isAnswered = true;
+                    } else if ((input.type === 'text' || input.type === 'textarea') && input.value.trim()) {
+                        isAnswered = true;
+                    }
+                });
+                
+                if (isAnswered) {
+                    answeredQuestions++;
+                }
+            });
+            
+            const percentage = Math.round((answeredQuestions / totalQuestions) * 100);
+            progressFill.style.width = percentage + '%';
+            progressText.textContent = percentage + '% Complete';
+        }
+
+        // Rating functionality
+        document.querySelectorAll('.rating-star').forEach(star => {
+            star.addEventListener('click', function() {
+                const questionId = this.getAttribute('data-question');
+                const rating = this.getAttribute('data-rating');
+                const stars = document.querySelectorAll(`.rating-star[data-question="${questionId}"]`);
+                const hiddenInput = document.getElementById(`rating_${questionId}`);
+                
+                // Update star colors
+                stars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+                
+                // Set hidden input value
+                hiddenInput.value = rating;
+                updateProgress();
+            });
+        });
+
+        // Update progress on input change
+        document.querySelectorAll('input, textarea').forEach(input => {
+            input.addEventListener('input', updateProgress);
+            input.addEventListener('change', updateProgress);
+        });
+
+        // Initial progress update
+        updateProgress();
+    </script>
+{% endblock %}
