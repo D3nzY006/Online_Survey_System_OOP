@@ -1,0 +1,14 @@
+{% load dictget %}
+
+<h2>{{ survey.title }}</h2>
+<p>{{ survey.description }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    {% for question in questions %}
+        <p>{{ question.text }}</p>
+        {{ forms|dictget:question.id }}
+    {% endfor %}
+    <button type="submit">Submit</button>
+</form>
+<a href="{% url 'survey_list' %}">Back to Surveys</a>

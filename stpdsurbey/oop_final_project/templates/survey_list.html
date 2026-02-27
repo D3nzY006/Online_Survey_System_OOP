@@ -1,0 +1,9 @@
+<h2>Available Surveys</h2>
+<p>Welcome, {{ user.username }}! <a href="{% url 'logout' %}">Logout</a></p>
+<ul>
+  {% for survey in surveys %}
+    <li><a href="{% url 'take_survey' survey.id %}">{{ survey.title }}</a></li>
+  {% empty %}
+    <li>No surveys available.</li>
+  {% endfor %}
+</ul>

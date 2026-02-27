@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('your-background-image.jpg'); /* Palitan ng background image na gusto mo */
+            background-size: cover;
+        }
+
+        .glass-container {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            box-shadow: 0 6px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(7px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            width: 400px; /* Dagdagan ang lapad para mas maluwag */
+            text-align: center;
+        }
+
+        .glass-container h2 {
+            margin-bottom: 25px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .glass-container input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.4);
+            color: #333;
+            outline: none;
+        }
+
+        .glass-container button {
+            background-color: #9C27B0; /* Purple */
+            color: white;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .glass-container button:hover {
+            background-color: #7B1FA2;
+        }
+
+        .glass-container a {
+            display: block;
+            margin-top: 15px;
+            color: #E91E63; /* Pink */
+            text-decoration: none;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="glass-container">
+        <h2>Register</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="error-message" style="color: red;">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit">Register</button>
+        </form>
+        <a href="{% url 'login' %}">Already have an account? Login</a>
+    </div>
+</body>
+</html>
