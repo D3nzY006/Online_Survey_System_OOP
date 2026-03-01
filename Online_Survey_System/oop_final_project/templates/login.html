@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SurveyPro | Login</title>
+  <style>
+    /* RESET & BASE STYLES */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f0f2f5; /* Light grey background from your image */
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    /* NAVIGATION */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .logo span {
+      color: #10b981;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* HERO SECTION */
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 80px 8%;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 40px;
+    }
+
+    .hero-text {
+      flex: 1;
+    }
+
+    .hero-text h1 {
+      font-size: 3rem;
+      color: #10b981; /* Emerald green from your first request */
+      margin-bottom: 20px;
+    }
+
+    .hero-text p {
+      font-size: 1.2rem;
+      color: #475569;
+      margin-bottom: 30px;
+    }
+
+    /* THE LOGIN CARD (Directly from your screenshot) */
+    .login-card {
+      background-color: #ffffff;
+      width: 100%;
+      max-width: 400px;
+      padding: 40px;
+      border-radius: 24px; /* Soft rounded corners */
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+
+    .login-card h2 {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 30px;
+      font-weight: 500;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+      color: #444;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background-color: #e8f0fe; /* Light blueish tint from your screenshot */
+      font-size: 16px;
+    }
+
+    /* THE LOGIN BUTTON */
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background-color: #5cb85c; /* Specific green from your image */
+      color: white;
+      border: none;
+      border-radius: 30px; /* Pill shape from your image */
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s;
+    }
+
+    .login-btn:hover {
+      background-color: #4cae4c;
+    }
+
+    /* REGISTER LINK */
+    .register-text {
+      margin-top: 25px;
+      font-size: 15px;
+      color: #5cb85c;
+    }
+
+    .register-text span {
+      color: #5cb85c;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+        text-align: center;
+      }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">SURVEY<span>PRO</span></div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Services</a></li>
+    </ul>
+    <div style="width: 100px;"></div> </nav>
+
+  <div class="container">
+    
+    <div class="hero-text">
+      <h1>WEB SURVEY</h1>
+      <p>Welcome to our feedback survey platform. Share your thoughts and help us improve. Your input is valuable in shaping better services.</p>
+      <button style="padding: 12px 24px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+        LEARN MORE
+      </button>
+    </div>
+
+    <div class="login-card">
+      <h2>Login</h2>
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Username:</label>
+          <input type="text" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+          <label>Password:</label>
+          <input type="password" name="password" placeholder="Password">
+        </div>
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+      <div class="register-text">
+        Create an account? <a href="{% url 'register' %}" class="register-link">Register</a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

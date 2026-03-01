@@ -1,0 +1,144 @@
+{% load dictget %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Instructions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2e7d32;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #2e7d32;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e8f5e9;
+            padding-bottom: 10px;
+        }
+        
+        .survey-info {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2e7d32;
+        }
+        
+        .survey-info h3 {
+            margin: 0 0 10px 0;
+            color: #2e7d32;
+        }
+        
+        ul {
+            line-height: 1.6;
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .note-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .note-box h3 {
+            margin: 0 0 10px 0;
+            color: #856404;
+        }
+        
+        .actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            background-color: #2e7d32;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #1b5e20;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Survey Instructions</h1>
+        
+        <div class="survey-info">
+            <h3>{{ survey.title }}</h3>
+            <p>{{ survey.description }}</p>
+        </div>
+
+        <h2>How to Complete This Survey</h2>
+        <ul>
+            <li><strong>Read each question carefully</strong> - Take your time to understand what is being asked</li>
+            <li><strong>Select your answer</strong> - Use the dropdown menu for each question to choose your response</li>
+            <li><strong>Answer all questions</strong> - Make sure to provide a response for every question before submitting</li>
+            <li><strong>Be honest</strong> - Your feedback is valuable and helps us improve</li>
+        </ul>
+
+        <div class="note-box">
+            <h3>Important Notes</h3>
+            <ul>
+                <li>Take your time - there's no time limit</li>
+                <li>Answer based on your genuine experience</li>
+                <li>If you're unsure about a question, choose the option that feels most accurate</li>
+                <li>You can review your answers before submitting</li>
+            </ul>
+        </div>
+
+        <div class="note-box">
+            <h3>⚠️ Important Reminder</h3>
+            <p>Once you submit, you cannot change your answers. Please review your responses carefully before submitting.</p>
+        </div>
+
+        <div class="actions">
+            <a href="{% url 'take_survey' survey.id %}" class="btn">Start Survey</a>
+            <a href="{% url 'survey_list' %}" class="btn btn-secondary">Back to Surveys</a>
+        </div>
+    </div>
+</body>
+</html>

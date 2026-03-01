@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You - SurveyPro</title>
+  <style>
+    /* RESET & BASE STYLES */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f0f2f5;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    /* NAVIGATION */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .logo span {
+      color: #10b981;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* HERO SECTION */
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 80px 8%;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 40px;
+    }
+
+    .hero-text {
+      flex: 1;
+    }
+
+    .hero-text h1 {
+      font-size: 3rem;
+      color: #10b981;
+      margin-bottom: 20px;
+    }
+
+    .hero-text p {
+      font-size: 1.2rem;
+      color: #475569;
+      margin-bottom: 30px;
+    }
+
+    /* THE THANK YOU CARD */
+    .thank-you-card {
+      background-color: #ffffff;
+      width: 100%;
+      max-width: 400px;
+      padding: 40px;
+      border-radius: 24px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+
+    .thank-you-card h2 {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 30px;
+      font-weight: 500;
+    }
+
+    .thank-you-card p {
+      font-size: 16px;
+      color: #475569;
+      margin-bottom: 30px;
+      text-align: left;
+    }
+
+    /* BUTTONS */
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background-color: #10b981;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 15px;
+      transition: background 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      background-color: #059669;
+    }
+
+    .btn-secondary {
+      background-color: #e2e8f0;
+      color: #334155;
+    }
+
+    .btn-secondary:hover {
+      background-color: #cbd5e1;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+        text-align: center;
+      }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">SURVEY<span>PRO</span></div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Services</a></li>
+    </ul>
+    <div style="width: 100px;"></div>
+  </nav>
+
+  <div class="container">
+    
+    <div class="hero-text">
+      <h1>WEB SURVEY</h1>
+      <p>Welcome to our feedback survey platform. Share your thoughts and help us improve. Your input is valuable in shaping better services.</p>
+      <button style="padding: 12px 24px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+        LEARN MORE
+      </button>
+    </div>
+
+    <div class="thank-you-card">
+      <h2>Thank You!</h2>
+      <p>Your survey has been successfully submitted. We appreciate your time and valuable feedback.</p>
+      <a href="{% url 'survey_list' %}" class="btn">View Other Surveys</a>
+      <a href="{% url 'survey_list' %}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+  </div>
+
+</body>
+</html>
